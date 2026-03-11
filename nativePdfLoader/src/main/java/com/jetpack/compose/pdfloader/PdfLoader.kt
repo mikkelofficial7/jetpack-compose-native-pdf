@@ -79,11 +79,7 @@ fun PdfCompose(pdfBase64String: String = "",
 
 @Composable
 private fun RenderAsImageBitmap(listBitmap: List<Bitmap>) {
-    LazyColumn {
-        items(listBitmap.size) { i ->
-            ZoomableImage(listBitmap[i])
-        }
-    }
+    ZoomableLayout(listBitmap)
 }
 
 @Composable
