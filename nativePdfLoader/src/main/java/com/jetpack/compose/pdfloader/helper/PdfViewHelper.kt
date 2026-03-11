@@ -6,17 +6,18 @@ import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.util.Base64
+import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.core.graphics.createBitmap
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import kotlin.io.println
 import kotlin.use
 
 class PdfViewHelper(val context: Context) {
@@ -80,7 +81,7 @@ class PdfViewHelper(val context: Context) {
         pdfBytes: ByteArray,
         password: String
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             try {
                 val doc: PDDocument = PDDocument.load(pdfBytes, password)
                 if (doc.isEncrypted) {
@@ -93,23 +94,15 @@ class PdfViewHelper(val context: Context) {
                 println("PDF Decrypt result: PDF decrypted successfully")
 
                 val listBitmap = convertPdfFileToBitmaps(decryptedFile)
-                withContext(Dispatchers.Main) {
-                    onSuccess(listBitmap)
-                }
+                onSuccess(listBitmap)
             } catch (e: IOException) {
                 e.printStackTrace()
                 println("PDF IOException result: Error => ${e.message}")
-
-                withContext(Dispatchers.Main) {
-                    onError(e)
-                }
+                onError(e)
             } catch (e: Exception) {
                 e.printStackTrace()
                 println("PDF General result: Error => ${e.message}")
-
-                withContext(Dispatchers.Main) {
-                    onError(e)
-                }
+                onError(e)
             }
         }
     }
@@ -143,11 +136,13 @@ class PdfViewHelper(val context: Context) {
             }
         } catch (e: Exception) {
             e.printStackTrace()
+            onError(e)
         } finally {
             try {
                 renderer?.close()
                 fd?.close()
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                onError(e)
             }
         }
         return bitmaps

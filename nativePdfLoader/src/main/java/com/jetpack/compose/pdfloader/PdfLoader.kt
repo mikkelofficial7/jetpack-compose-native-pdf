@@ -1,9 +1,6 @@
 package com.jetpack.compose.pdfloader
 
 import android.graphics.Bitmap
-import android.util.Log
-import android.view.LayoutInflater
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +12,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,14 +22,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import com.jetpack.compose.pdfloader.helper.PdfViewHelper
-import com.lib.zoomimageengine.ZoomImageView
 
 @Composable
 fun PdfCompose(pdfBase64String: String = "",
-               filename: String = ""
+               filename: String = "",
+               onError: (Exception) -> Unit = {}
 ) {
     var pdfBytes by remember { mutableStateOf<ByteArray?>(null) }
     var listOfBitmap by remember { mutableStateOf<List<Bitmap>>(listOf()) }
@@ -52,6 +46,7 @@ fun PdfCompose(pdfBase64String: String = "",
         showPasswordDialog = false
     }
     pdfViewHelper.onError = { e ->
+        onError(e)
         isWrongPassword = true
     }
 
@@ -86,16 +81,7 @@ fun PdfCompose(pdfBase64String: String = "",
 private fun RenderAsImageBitmap(listBitmap: List<Bitmap>) {
     LazyColumn {
         items(listBitmap.size) { i ->
-            AndroidView(
-                modifier = Modifier.fillParentMaxSize(),
-                factory = { context ->
-                    LayoutInflater.from(context).inflate(R.layout.xml_pdf_view, null, false)
-                },
-                update = { view ->
-                    val imgPdf = view.findViewById<ZoomImageView>(R.id.iv_image_pdf)
-                    imgPdf.setImageBitmap(listBitmap[i])
-                }
-            )
+            ZoomableImage(listBitmap[i])
         }
     }
 }
