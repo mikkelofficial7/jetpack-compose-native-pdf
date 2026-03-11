@@ -1,4 +1,4 @@
-package com.jetpack.compose.nativepdfloader
+package com.jetpack.compose.pdfloader
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.jetpack.compose.nativepdfloader.test", appContext.packageName)
+        assertEquals("com.jetpack.compose.pdfloader.test", appContext.packageName)
     }
 }

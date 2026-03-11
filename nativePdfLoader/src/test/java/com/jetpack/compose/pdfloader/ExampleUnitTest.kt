@@ -1,4 +1,4 @@
-package com.jetpack.compose.nativepdfloader
+package com.jetpack.compose.pdfloader
 
 import org.junit.Test
 
