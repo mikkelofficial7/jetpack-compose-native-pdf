@@ -6,7 +6,6 @@ import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.util.Base64
-import android.util.Log
 import androidx.core.content.FileProvider
 import androidx.core.graphics.createBitmap
 import com.tom_roush.pdfbox.pdmodel.PDDocument
@@ -17,7 +16,6 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import kotlin.io.println
 import kotlin.use
 
 class PdfViewHelper(val context: Context) {
@@ -40,7 +38,7 @@ class PdfViewHelper(val context: Context) {
             pdfFile = null
             pdfUriEncrypted = null
         } catch (e: Exception) {
-            println("Failed to clear pdf cache: ${e.message}")
+            // println("Failed to clear pdf cache: ${e.message}")
         }
     }
 
@@ -91,17 +89,17 @@ class PdfViewHelper(val context: Context) {
                 val decryptedFile = File(context.cacheDir, pdfFilename)
                 doc.save(decryptedFile)
                 doc.close()
-                println("PDF Decrypt result: PDF decrypted successfully")
+                // println("PDF Decrypt result: PDF decrypted successfully")
 
                 val listBitmap = convertPdfFileToBitmaps(decryptedFile)
                 onSuccess(listBitmap)
             } catch (e: IOException) {
                 e.printStackTrace()
-                println("PDF IOException result: Error => ${e.message}")
+                // println("PDF IOException result: Error => ${e.message}")
                 onError(e)
             } catch (e: Exception) {
                 e.printStackTrace()
-                println("PDF General result: Error => ${e.message}")
+                // println("PDF General result: Error => ${e.message}")
                 onError(e)
             }
         }

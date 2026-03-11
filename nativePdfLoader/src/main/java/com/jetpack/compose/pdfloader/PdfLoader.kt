@@ -3,8 +3,9 @@ package com.jetpack.compose.pdfloader
 import android.graphics.Bitmap
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -22,10 +23,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.jetpack.compose.pdfloader.helper.PdfViewHelper
 
 @Composable
-fun PdfCompose(pdfBase64String: String = "",
+fun NativePdfCompose(pdfBase64String: String = "",
                filename: String = "",
                onError: (Exception) -> Unit = {}
 ) {
@@ -34,6 +37,7 @@ fun PdfCompose(pdfBase64String: String = "",
     var showPasswordDialog by remember { mutableStateOf(true) }
     var isWrongPassword by remember { mutableStateOf(false) }
 
+    val pdfFilename = filename.ifEmpty { "${System.currentTimeMillis()}.pdf" }
     val context = LocalContext.current
     val pdfViewHelper = remember { PdfViewHelper(context) }
 
@@ -52,7 +56,7 @@ fun PdfCompose(pdfBase64String: String = "",
 
     pdfViewHelper.loadPdfFromBase64(
         pdfBase64String,
-        filename,
+        pdfFilename,
         LocalContext.current.packageName
     )
 
@@ -83,7 +87,7 @@ private fun RenderAsImageBitmap(listBitmap: List<Bitmap>) {
 }
 
 @Composable
-fun ShowInputPasswordDialog(
+private fun ShowInputPasswordDialog(
     isWrongPassword: Boolean,
     onValueChange: () -> Unit = {},
     onDismiss: () -> Unit,
@@ -94,30 +98,34 @@ fun ShowInputPasswordDialog(
     AlertDialog(
         containerColor = Color.White,
         onDismissRequest = {  },
-        title = { Text("Enter PDF Password") },
+        title = { Text("Enter PDF Password", fontSize = 18.sp) },
         text = {
-            OutlinedTextField(
-                value = password,
-                onValueChange = {
-                    password = it
-                    onValueChange()
-                },
-                label = { Text("Input password here") },
-                singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = if (isWrongPassword) Color.Red else Color.Black,
-                    focusedLabelColor = if (isWrongPassword) Color.Red else Color.Black,
-                    focusedTextColor = Color.Black,
-                    focusedLeadingIconColor = Color.Black,
-                    focusedTrailingIconColor = Color.Black,
-                    unfocusedBorderColor = Color.Gray,
-                    unfocusedLabelColor = Color.Gray,
-                    unfocusedTextColor = Color.Black,
-                    cursorColor = Color.Black
+            Column {
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = {
+                        password = it
+                        onValueChange()
+                    },
+                    label = { Text("Input password here") },
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = if (isWrongPassword) Color.Red else Color.Black,
+                        focusedLabelColor = if (isWrongPassword) Color.Red else Color.Black,
+                        focusedTextColor = Color.Black,
+                        focusedLeadingIconColor = Color.Black,
+                        focusedTrailingIconColor = Color.Black,
+                        unfocusedBorderColor = if (isWrongPassword) Color.Red else Color.Gray,
+                        unfocusedLabelColor = Color.Gray,
+                        unfocusedTextColor = Color.Black,
+                        cursorColor = Color.Black
+                    )
                 )
-            )
+                if (isWrongPassword) Text("Incorrect password", color = Color.Red,
+                    modifier = Modifier.padding(0.dp, 10.dp))
+            }
         },
         confirmButton = {
             Button(

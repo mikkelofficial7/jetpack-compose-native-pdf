@@ -56,7 +56,7 @@ fun ZoomableLayout(listBitmap: List<Bitmap>) {
             .transformable(
                 state = transformState,
                 lockRotationOnZoomPan = true,
-                canPan = { scale.value > 1f } // ← allow scroll when not zoomed
+                canPan = { scale.value > 1f }
             )
             .pointerInput(Unit) {
                 detectTapGestures(
