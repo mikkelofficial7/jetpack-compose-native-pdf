@@ -1,4 +1,4 @@
-package com.jetpack.compose.pdfloader.helper
+package com.jetpack.compose.pdfhelper
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -28,11 +28,11 @@ class PdfViewHelper(val context: Context) {
     var onSuccess: (listBitmap: List<Bitmap>) -> Unit = {}
     var onError: (e: Exception) -> Unit = {}
 
-    internal fun getPDFUri(): Uri? {
+    fun getPDFUri(): Uri? {
         return pdfUriEncrypted
     }
 
-    internal fun clearCache() {
+    fun clearCache() {
         try {
             pdfFile?.let { if (it.exists()) it.delete() }
             pdfFile = null
@@ -42,7 +42,7 @@ class PdfViewHelper(val context: Context) {
         }
     }
 
-    internal fun loadPdfFromBase64(
+    fun loadPdfFromBase64(
         base64String: String,
         filename: String,
         applicationId: String
@@ -75,7 +75,7 @@ class PdfViewHelper(val context: Context) {
         }
     }
 
-    internal fun decryptPdfFile(
+    fun decryptPdfFile(
         pdfBytes: ByteArray,
         password: String
     ) {

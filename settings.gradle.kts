@@ -23,3 +23,4 @@ dependencyResolutionManagement {
 rootProject.name = "NativePdf"
 include(":app")
 include(":nativePdfLoader")
+include(":pdfHelper")
