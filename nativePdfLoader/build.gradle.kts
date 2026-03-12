@@ -54,7 +54,7 @@ afterEvaluate {
             register<MavenPublication>("release") {
                 groupId = "com.github.mikkelofficial7"
                 artifactId = "JetpackComposeNativePdf"
-                version = "1.0.0"
+                version = "1.0.2"
 
                 from(components["release"])
             }
