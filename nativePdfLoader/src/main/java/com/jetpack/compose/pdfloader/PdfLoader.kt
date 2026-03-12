@@ -28,16 +28,27 @@ import androidx.compose.ui.unit.sp
 import com.jetpack.compose.pdfhelper.PdfViewHelper
 
 @Composable
-fun NativePdfCompose(pdfBase64String: String = "",
-               filename: String = "",
-               onError: (Exception) -> Unit = {}
+fun NativePdfCompose(
+               pdfBase64: String = "",
+               pdfFilename: String = "",
+               dialogPasswordTitle: String = "",
+               dialogPasswordInputText: String = "",
+               dialogPasswordPositiveButton: String = "",
+               dialogPasswordPositiveTextColor: String = "",
+               dialogPasswordPositiveBgColor: String = "",
+               dialogPasswordNegativeButton: String = "",
+               dialogPasswordNegativeTextColor: String = "",
+               dialogPasswordNegativeBgColor: String = "",
+               dialogErrorText: String = "",
+               onError: (Exception) -> Unit = {},
+               onDismissDialog: () -> Unit = {}
 ) {
     var pdfBytes by remember { mutableStateOf<ByteArray?>(null) }
     var listOfBitmap by remember { mutableStateOf<List<Bitmap>>(listOf()) }
     var showPasswordDialog by remember { mutableStateOf(true) }
     var isWrongPassword by remember { mutableStateOf(false) }
 
-    val pdfFilename = filename.ifEmpty { "${System.currentTimeMillis()}.pdf" }
+    val pdfFilename = pdfFilename.ifEmpty { "${System.currentTimeMillis()}.pdf" }
     val context = LocalContext.current
     val pdfViewHelper = remember { PdfViewHelper(context) }
 
@@ -55,7 +66,7 @@ fun NativePdfCompose(pdfBase64String: String = "",
     }
 
     pdfViewHelper.loadPdfFromBase64(
-        pdfBase64String,
+        pdfBase64,
         pdfFilename,
         LocalContext.current.packageName
     )
@@ -66,8 +77,18 @@ fun NativePdfCompose(pdfBase64String: String = "",
             if (showPasswordDialog) {
                 ShowInputPasswordDialog(
                     isWrongPassword,
+                    dialogPasswordTitle,
+                    dialogPasswordInputText,
+                    dialogPasswordPositiveButton,
+                    dialogPasswordPositiveTextColor,
+                    dialogPasswordPositiveBgColor,
+                    dialogPasswordNegativeButton,
+                    dialogPasswordNegativeTextColor,
+                    dialogPasswordNegativeBgColor,
+                    dialogErrorText,
                     onDismiss = {
                         showPasswordDialog = false
+                        onDismissDialog()
                     },
                     onSubmit = { password ->
                         pdfViewHelper.decryptPdfFile(bytes, password)
@@ -89,16 +110,37 @@ private fun RenderAsImageBitmap(listBitmap: List<Bitmap>) {
 @Composable
 private fun ShowInputPasswordDialog(
     isWrongPassword: Boolean,
+    dialogPasswordTitle: String = "",
+    dialogPasswordInputText: String = "",
+    dialogPasswordPositiveButton: String = "",
+    dialogPasswordPositiveTextColor: String = "",
+    dialogPasswordPositiveBgColor: String = "",
+    dialogPasswordNegativeButton: String = "",
+    dialogPasswordNegativeTextColor: String = "",
+    dialogPasswordNegativeBgColor: String = "",
+    dialogErrorText: String = "",
     onValueChange: () -> Unit = {},
     onDismiss: () -> Unit,
     onSubmit: (String) -> Unit
 ) {
     var password by remember { mutableStateOf("") }
 
+    val title = dialogPasswordTitle.ifEmpty { "Enter PDF Password" }
+    val inputText = dialogPasswordInputText.ifEmpty { "Input password here" }
+    val positiveButtonText = dialogPasswordPositiveButton.ifEmpty { "Submit" }
+    val negativeButtonText = dialogPasswordNegativeButton.ifEmpty { "Close" }
+    val errorText = dialogErrorText.ifEmpty { "Incorrect password" }
+
+    val positiveTextColor = if (dialogPasswordPositiveTextColor.isEmpty()) Color.Black else dialogPasswordPositiveTextColor.toComposeColor()
+    val negativeTextColor = if (dialogPasswordNegativeTextColor.isEmpty()) Color.Black else dialogPasswordNegativeTextColor.toComposeColor()
+
+    val positiveBgColor = if (dialogPasswordPositiveBgColor.isEmpty()) Color.Gray else dialogPasswordPositiveBgColor.toComposeColor()
+    val negativeBgColor = if (dialogPasswordNegativeBgColor.isEmpty()) Color.White else dialogPasswordNegativeBgColor.toComposeColor()
+
     AlertDialog(
         containerColor = Color.White,
         onDismissRequest = {  },
-        title = { Text("Enter PDF Password", fontSize = 18.sp) },
+        title = { Text(title, fontSize = 18.sp) },
         text = {
             Column {
                 OutlinedTextField(
@@ -107,7 +149,7 @@ private fun ShowInputPasswordDialog(
                         password = it
                         onValueChange()
                     },
-                    label = { Text("Input password here") },
+                    label = { Text(inputText) },
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -123,7 +165,7 @@ private fun ShowInputPasswordDialog(
                         cursorColor = Color.Black
                     )
                 )
-                if (isWrongPassword) Text("Incorrect password", color = Color.Red,
+                if (isWrongPassword) Text(errorText, color = Color.Red,
                     modifier = Modifier.padding(0.dp, 10.dp))
             }
         },
@@ -131,22 +173,22 @@ private fun ShowInputPasswordDialog(
             Button(
                 onClick = { onSubmit(password) },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Gray,
-                    contentColor = Color.Black
+                    containerColor = positiveBgColor,
+                    contentColor = positiveTextColor
                 ),
             ) {
-                Text("Submit")
+                Text(positiveButtonText)
             }
         },
         dismissButton = {
             Button(
                 onClick = { onDismiss() },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Color.Black
+                    containerColor = negativeBgColor,
+                    contentColor = negativeTextColor
                 ),
             ) {
-                Text("Close")
+                Text(negativeButtonText)
             }
         }
     )

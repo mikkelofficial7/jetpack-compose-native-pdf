@@ -24,3 +24,4 @@ rootProject.name = "NativePdf"
 include(":app")
 include(":nativePdfLoader")
 include(":pdfHelper")
+include(":pdfDecryptor")

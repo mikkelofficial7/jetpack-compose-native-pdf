@@ -1,13 +1,26 @@
 # Jetpack Compose Passworded Native PDF from Base64 📁
 
-Turn your Base64 Password/No Password PDF into Native Pdf Viewer (For Jetpack Compose)
+Turn your Base64 Password/No Password PDF into Native Pdf Viewer (For Jetpack Compose).
+  
+
+Replaced 
+
+`compileOnly 'com.gemalto.jp2:jp2-android:1.0.3'`
+
+to
+
+`implementation("org.opencv:opencv:4.9.0")`
+
+for **JPEG-2000 (JP2) Encoder/Decoder**
+  
+
+This library was inspired by [Pdf Box Decryptor](https://github.com/TomRoush/PdfBox-Android)
 
 <div align="left">
   <img src="https://github.com/mikkelofficial7/jetpack-compose-native-pdf/blob/main/screenshot.png" alt="Jetpack Compose Passworded Native PDF" width="500" height="600">
 </div>
 
-
-Demo video [here](https://videy.co/v/?id=84GCUo4u1)
+Full Demo video [here](https://videy.co/v/?id=84GCUo4u1)
 
 Latest stable version: 
 

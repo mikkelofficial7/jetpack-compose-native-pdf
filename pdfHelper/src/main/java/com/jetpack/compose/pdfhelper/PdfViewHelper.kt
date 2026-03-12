@@ -8,7 +8,7 @@ import android.os.ParcelFileDescriptor
 import android.util.Base64
 import androidx.core.content.FileProvider
 import androidx.core.graphics.createBitmap
-import com.tom_roush.pdfbox.pdmodel.PDDocument
+import com.jetpack.compose.pdfDecryptor.pdfbox.pdmodel.PDDocument
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
