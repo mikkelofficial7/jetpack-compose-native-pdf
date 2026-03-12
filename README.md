@@ -49,7 +49,7 @@ repositories {
 }
 ```
 
-3. Just call ```NativePdfCompose()``` in your parent activity and set base64 string and pdf name (optional)
+3. Just call ```NativePdfCompose()``` in your parent activity with several customize parameters
 ```
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NativePdfTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
-                    SampleNativePdf()
+                    NativePdfCompose()
                 }
             }
         }
@@ -66,7 +66,19 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun SampleNativePdf() {
-   NativePdfCompose("YOUR_BASE64_PDF", "YOUR_PDF_NAME")
-}
+fun NativePdfCompose(
+   pdfBase64: String = "",
+   pdfFilename: String = "",
+   dialogPasswordTitle: String = "",
+   dialogPasswordInputText: String = "",
+   dialogPasswordPositiveButton: String = "",
+   dialogPasswordPositiveTextColor: String = "",
+   dialogPasswordPositiveBgColor: String = "",
+   dialogPasswordNegativeButton: String = "",
+   dialogPasswordNegativeTextColor: String = "",
+   dialogPasswordNegativeBgColor: String = "",
+   dialogErrorText: String = "",
+   onError: (Exception) -> Unit = {},
+   onDismissDialog: () -> Unit = {}
+)
 ```
