@@ -31,13 +31,13 @@ How to use (Sample demo provided):
 1. Add this gradle in ```build.gradle(:app)``` :
 ```
 dependencies {
-   implementation 'com.github.mikkelofficial7:jetpack-compose-native-pdf:1.0.1'
+   implementation 'com.github.mikkelofficial7:jetpack-compose-native-pdf:1.0.2'
 }
  ```
 or gradle.kts:
 ```
 dependencies {
-   implementation("com.github.mikkelofficial7:jetpack-compose-native-pdf:1.0.1")
+   implementation("com.github.mikkelofficial7:jetpack-compose-native-pdf:1.0.2")
 }
  ```
 
