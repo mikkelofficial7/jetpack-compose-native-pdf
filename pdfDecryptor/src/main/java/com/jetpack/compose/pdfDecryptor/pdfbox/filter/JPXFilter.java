@@ -133,11 +133,11 @@ public final class JPXFilter extends Filter
     {
         try
         {
-            Class.forName("com.gemalto.jp2.JP2Decoder");
+            Class.forName("org.opencv:opencv:4.9.0");
         }
         catch (ClassNotFoundException ex)
         {
-            throw new MissingImageReaderException("Cannot read JPX image: JP2Android is not installed.");
+            throw new MissingImageReaderException("Cannot read JPX image: Open CV is not installed.");
         }
 
         Bitmap image = decodeJP2(input);
