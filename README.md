@@ -20,7 +20,9 @@ This library was inspired by [Pdf Box Decryptor](https://github.com/TomRoush/Pdf
   <img src="https://github.com/mikkelofficial7/jetpack-compose-native-pdf/blob/main/screenshot.png" alt="Jetpack Compose Passworded Native PDF" width="500" height="600">
 </div>
 
-Full Demo video [here](https://videy.co/v/?id=84GCUo4u1)
+Full Demo video below:
+
+[![Watch the video](https://img.youtube.com/vi/TRkxKmAJQ9M/0.jpg)](https://youtube.com/shorts/TRkxKmAJQ9M?feature=share)
 
 Latest stable version: 
 
